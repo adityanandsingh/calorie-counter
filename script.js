@@ -46,5 +46,32 @@ function calculateCalories(e) {
     const dinnerCalories = getCaloriesFromInputs(dinnerNumberInputs);
     const snacksCalories = getCaloriesFromInputs(snacksNumberInputs);
     const exerciseCalories = getCaloriesFromInputs(exerciseNumberInputs);
+    const budgetCalories = getCaloriesFromInputs([budgetNumberInput]);
   
+    if (isError) {
+      return;
+    }
+  
+    const consumedCalories = breakfastCalories + lunchCalories + dinnerCalories + snacksCalories;
+    const remainingCalories = budgetCalories - consumedCalories + exerciseCalories;
+    const surplusOrDeficit = remainingCalories >= 0 ? 'Surplus' : 'Deficit';
+    output.innerHTML = ``;
   }
+  function getCaloriesFromInputs(list) {
+    let calories = 0;
+  
+    for (let i = 0; i < list.length; i++) {
+      const currVal = cleanInputString(list[i].value);
+      const invalidInputMatch = isInvalidInput(currVal);
+  
+      if (invalidInputMatch) {
+        alert(`Invalid Input: ${invalidInputMatch[0]}`);
+        isError = true;
+        return null;
+      }
+      calories += Number(currVal);
+    }
+    return calories;
+  }
+  
+  addEntryButton.addEventListener("click", addEntry);
